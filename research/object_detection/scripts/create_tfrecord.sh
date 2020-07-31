@@ -1,11 +1,11 @@
 #!/bin/bash
-TRAIN_IMAGE_DIR="./research/object_detection/datasets/val2017/images/"
+TRAIN_IMAGE_DIR="./object_detection/datasets/val2017/images/"
 VAL_IMAGE_DIR=$(TRAIN_IMAGE_DIR)
 TEST_IMAGE_DIR=$(TRAIN_IMAGE_DIR)
-TRAIN_ANNOTATIONS_FILE="./research/object_detection/datasets/val2017/annotations/"
+TRAIN_ANNOTATIONS_FILE="./object_detection/datasets/val2017/annotations/"
 VAL_ANNOTATIONS_FILE=$(TRAIN_ANNOTATIONS_FILE)
 TESTDEV_ANNOTATIONS_FILE=$(TRAIN_ANNOTATIONS_FILE)
-OUTPUT_DIR="./research/object_detection/datasets/val2017/tfrecords/"
+OUTPUT_DIR="./object_detection/datasets/val2017/tfrecords/"
 
 python create_coco_tf_record.py --logtostderr \
   --train_image_dir="${TRAIN_IMAGE_DIR}" \
