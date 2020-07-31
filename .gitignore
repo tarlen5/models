@@ -101,4 +101,5 @@ ENV/
 research/object_detection/datasets
 
 # Ignore object detection checkpoints
-research/object_detection/models/checkpoints/
+#research/object_detection/models/checkpoints/detection/
+#research/object_detection/models/checkpoints/classification/
