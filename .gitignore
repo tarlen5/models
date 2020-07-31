@@ -96,3 +96,9 @@ ENV/
 
 # For mac
 .DS_Store
+
+# Ignore object detection datasets
+research/object_detection/datasets
+
+# Ignore object detection checkpoints
+research/object_detection/models/checkpoints/

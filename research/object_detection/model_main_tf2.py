@@ -30,6 +30,11 @@ python model_main_tf2.py -- \
 from absl import flags
 import tensorflow.compat.v2 as tf
 from object_detection import model_lib_v2
+from pathlib import PurePath
+# tf.debugging.set_log_device_placement(True)
+
+
+from trains import Task
 
 flags.DEFINE_string('pipeline_config_path', None, 'Path to pipeline config '
                     'file.')
@@ -71,10 +76,14 @@ flags.DEFINE_boolean('record_summaries', True,
 FLAGS = flags.FLAGS
 
 
+
 def main(unused_argv):
   flags.mark_flag_as_required('model_dir')
   flags.mark_flag_as_required('pipeline_config_path')
   tf.config.set_soft_device_placement(True)
+
+  task = Task.init(project_name="TF2 OD API - Evaluation of EfficientDet", task_name=PurePath(FLAGS.pipeline_config_path).parent.name)
+  task.connect_configuration(FLAGS.pipeline_config_path)
 
   if FLAGS.checkpoint_dir:
     model_lib_v2.eval_continuously(
