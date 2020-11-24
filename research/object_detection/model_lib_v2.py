@@ -782,10 +782,9 @@ def eager_eval_loop(
     return eval_dict, losses_dict, class_agnostic
 
   agnostic_categories = label_map_util.create_class_agnostic_category_index()
-  #per_class_categories = label_map_util.create_category_index_from_labelmap(
-  #    eval_input_config.label_map_path)
-  per_class_categories = label_map_util.create_category_index_from_allegro_dataview(
-                eval_input_config.allegro_input_reader.dataview_name)
+  per_class_categories = label_map_util.create_category_index_from_labelmap(
+      eval_input_config.label_map_path)
+
   keypoint_edges = [
       (kp.start, kp.end) for kp in eval_config.keypoint_edge]
 
