@@ -30,11 +30,9 @@ python model_main_tf2.py -- \
 from absl import flags
 import tensorflow.compat.v2 as tf
 from object_detection import model_lib_v2
-from pathlib import PurePath
-# tf.debugging.set_log_device_placement(True)
-
 
 from trains import Task
+
 
 flags.DEFINE_string('pipeline_config_path', None, 'Path to pipeline config '
                     'file.')
@@ -72,20 +70,29 @@ flags.DEFINE_integer(
 flags.DEFINE_boolean('record_summaries', True,
                      ('Whether or not to record summaries during'
                       ' training.'))
-flags.DEFINE_string('project_name', None, 'TRAINS project name')
-flags.DEFINE_string('task_name', None, 'TRAINS task name')
+flags.DEFINE_string(
+    'project_name',
+    'forsight-detection',
+    'Name of the project for Trains logging',
+)
+flags.DEFINE_string(
+    'task_name',
+    None,
+    'Name of the task for Trains logging',
+)
 
 FLAGS = flags.FLAGS
 
 
-
 def main(unused_argv):
+  flags.mark_flag_as_required('task_name')
   flags.mark_flag_as_required('model_dir')
   flags.mark_flag_as_required('pipeline_config_path')
   tf.config.set_soft_device_placement(True)
 
   task = Task.init(project_name=FLAGS.project_name, task_name=FLAGS.task_name)
   task.connect_configuration(FLAGS.pipeline_config_path)
+
 
   if FLAGS.checkpoint_dir:
     model_lib_v2.eval_continuously(
@@ -96,7 +103,7 @@ def main(unused_argv):
         sample_1_of_n_eval_on_train_examples=(
             FLAGS.sample_1_of_n_eval_on_train_examples),
         checkpoint_dir=FLAGS.checkpoint_dir,
-        wait_interval=300, timeout=FLAGS.eval_timeout)
+        wait_interval=10, timeout=FLAGS.eval_timeout)
   else:
     if FLAGS.use_tpu:
       # TPU is automatically inferred if tpu_name is None and

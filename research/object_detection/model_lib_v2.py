@@ -267,11 +267,11 @@ def eager_train_step(detection_model,
     gradients, _ = tf.clip_by_global_norm(gradients, clip_gradients_value)
   optimizer.apply_gradients(zip(gradients, trainable_variables))
   tf.compat.v2.summary.scalar('learning_rate', learning_rate, step=global_step)
-  tf.compat.v2.summary.image(
-      name='train_input_images',
-      step=global_step,
-      data=features[fields.InputDataFields.image],
-      max_outputs=3)
+  #tf.compat.v2.summary.image(
+  #    name='train_input_images',
+  #    step=global_step,
+  #    data=features[fields.InputDataFields.image],
+  #    max_outputs=3)
   return total_loss
 
 
@@ -574,7 +574,7 @@ def train_loop(
         # in a worker.
         latest_checkpoint = tf.train.latest_checkpoint(model_dir)
         ckpt.restore(latest_checkpoint)
-
+        
         def train_step_fn(features, labels):
           """Single train step."""
           loss = eager_train_step(
@@ -712,6 +712,14 @@ def eager_eval_loop(
         eval_config,
         list(class_aware_category_index.values()),
         evaluator_options)
+  if eval_input_config.WhichOneof('input_reader') == 'allegro_input_reader':
+    class_aware_category_index = label_map_util.create_category_index_from_allegro_dataview(
+                eval_input_config.allegro_input_reader.dataview_name)
+    class_aware_evaluators = eval_util.get_evaluators(
+        eval_config,
+        list(class_aware_category_index.values()),
+        evaluator_options)
+
 
   evaluators = None
   loss_metrics = {}
@@ -774,8 +782,10 @@ def eager_eval_loop(
     return eval_dict, losses_dict, class_agnostic
 
   agnostic_categories = label_map_util.create_class_agnostic_category_index()
-  per_class_categories = label_map_util.create_category_index_from_labelmap(
-      eval_input_config.label_map_path)
+  #per_class_categories = label_map_util.create_category_index_from_labelmap(
+  #    eval_input_config.label_map_path)
+  per_class_categories = label_map_util.create_category_index_from_allegro_dataview(
+                eval_input_config.allegro_input_reader.dataview_name)
   keypoint_edges = [
       (kp.start, kp.end) for kp in eval_config.keypoint_edge]
 

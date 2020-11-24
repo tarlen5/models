@@ -20,6 +20,7 @@ import argparse
 
 from trains import Task
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '--model_dir',
