@@ -31,7 +31,7 @@ from absl import flags
 import tensorflow.compat.v2 as tf
 from object_detection import model_lib_v2
 
-from trains import Task
+from clearml import Task
 
 
 flags.DEFINE_string('pipeline_config_path', None, 'Path to pipeline config '
