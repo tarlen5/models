@@ -245,13 +245,13 @@ class CocoDetectionEvaluator(object_detection_evaluation.DetectionEvaluator):
         self._detection_boxes_list)
     box_evaluator = coco_tools.COCOEvalWrapper(
         coco_wrapped_groundtruth, coco_wrapped_detections, agnostic_mode=False)
-    box_metrics, box_per_category_ap = box_evaluator.ComputeMetrics(
+    box_metrics, box_per_category_ap, cocoGt, cocoDt = box_evaluator.ComputeMetrics(
         include_metrics_per_category=self._include_metrics_per_category,
         all_metrics_per_category=self._all_metrics_per_category)
     box_metrics.update(box_per_category_ap)
     box_metrics = {'DetectionBoxes_'+ key: value
                    for key, value in iter(box_metrics.items())}
-    return box_metrics
+    return box_metrics, cocoGt, cocoDt
 
   def add_eval_dict(self, eval_dict):
     """Observes an evaluation result dict for a single example.
