@@ -890,9 +890,6 @@ def eager_eval_loop(
       mask = det['segmentation'] if 'segmentation' in det else None
       det_data.add_detection(image, _cls, score, box, mask)
 
-
-  Logger.current_logger().report_table("per_class_errors_df", "Per class errors",
-                                        iteration=0, table_plot=get_main_per_class_errors_exploded)
   
   tide.evaluate(gt_data, det_data, mode=TIDE.BOX)
   tide.summarize()
