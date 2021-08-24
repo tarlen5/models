@@ -332,7 +332,10 @@ class COCOEvalWrapper(cocoeval.COCOeval):
         per_category_ap['Recall AR@100 (large) ByCategory/{}'.format(
             category)] = self.category_stats[11][category_index]
 
-    return summary_metrics, per_category_ap
+    cocoGt = self.cocoGt.dataset
+    cocoDt = self.cocoDt.dataset
+    
+    return summary_metrics, per_category_ap, cocoGt, cocoDt
 
 
 def _ConvertBoxToCOCOFormat(box):
