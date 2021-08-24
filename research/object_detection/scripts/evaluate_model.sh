@@ -11,7 +11,7 @@ python ./object_detection/model_main_tf2.py \
     --pipeline_config_path=${PIPELINE_CONFIG_PATH} \
     --model_dir=${MODEL_DIR} \
     --checkpoint_dir=${CHECKPOINT_DIR} \
-    --task_name=${TASK_NAME}
+    --task_name=${TASK_NAME} \
     --eval_timeout=5 \
     --alsologtostderr
 done
