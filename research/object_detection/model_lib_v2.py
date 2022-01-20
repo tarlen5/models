@@ -39,8 +39,8 @@ from object_detection.utils import ops
 from object_detection.utils import visualization_utils as vutils
 from object_detection.utils import json_utils
 
-from clearml import Logger
-from tidecv import Data, TIDE
+#from clearml import Logger
+#from tidecv import Data, TIDE
 
 # pylint: disable=g-import-not-at-top
 try:
@@ -667,8 +667,7 @@ def eager_eval_loop(
     eval_dataset,
     use_tpu=False,
     postprocess_on_cpu=False,
-    global_step=None,
-    clearml_task=None):
+    global_step=None):
   """Evaluate the model eagerly on the evaluation dataset.
 
   This method will compute the evaluation metrics specified in the configs on
@@ -863,37 +862,37 @@ def eager_eval_loop(
     tf.compat.v2.summary.scalar(k, eval_metrics[k], step=global_step)
     tf.logging.info('\t+ %s: %f', k, eval_metrics[k])
     
-  clearml_task.upload_artifact(
-      name='cocoGt', artifact_object=json.dumps(cocoGt, cls=json_utils.NumpyEncoder))
+  # clearml_task.upload_artifact(
+  #     name='cocoGt', artifact_object=json.dumps(cocoGt, cls=json_utils.NumpyEncoder))
   
-  clearml_task.upload_artifact(
-      name='cocoDt', artifact_object=json.dumps(cocoDt, cls=json_utils.NumpyEncoder))
+  # clearml_task.upload_artifact(
+  #     name='cocoDt', artifact_object=json.dumps(cocoDt, cls=json_utils.NumpyEncoder))
   
   
-  tide = TIDE()
+  # tide = TIDE()
 
-  gt_data = Data('gt_data')
-  det_data = Data('det_data')
+  # gt_data = Data('gt_data')
+  # det_data = Data('det_data')
 
-  for det in evaluators[0]._groundtruth_list:
-      image = det['image_id']
-      _cls = det['category_id']
-      box = det['bbox'] if 'bbox' in det else None
-      mask = det['segmentation'] if 'segmentation' in det else None
-      gt_data.add_ground_truth(image, _cls, box, mask)
+  # for det in evaluators[0]._groundtruth_list:
+  #     image = det['image_id']
+  #     _cls = det['category_id']
+  #     box = det['bbox'] if 'bbox' in det else None
+  #     mask = det['segmentation'] if 'segmentation' in det else None
+  #     gt_data.add_ground_truth(image, _cls, box, mask)
 
-  for det in evaluators[0]._detection_boxes_list:
-      image = det['image_id']
-      _cls = det['category_id']
-      score = det['score']
-      box = det['bbox'] if 'bbox' in det else None
-      mask = det['segmentation'] if 'segmentation' in det else None
-      det_data.add_detection(image, _cls, score, box, mask)
+  # for det in evaluators[0]._detection_boxes_list:
+  #     image = det['image_id']
+  #     _cls = det['category_id']
+  #     score = det['score']
+  #     box = det['bbox'] if 'bbox' in det else None
+  #     mask = det['segmentation'] if 'segmentation' in det else None
+  #     det_data.add_detection(image, _cls, score, box, mask)
 
   
-  tide.evaluate(gt_data, det_data, mode=TIDE.BOX)
-  tide.summarize()
-  tide.plot()
+  # tide.evaluate(gt_data, det_data, mode=TIDE.BOX)
+  # tide.summarize()
+  # tide.plot()
   
   
   return eval_metrics
@@ -984,7 +983,7 @@ def eval_continuously(
   if kwargs['use_bfloat16']:
     tf.compat.v2.keras.mixed_precision.experimental.set_policy('mixed_bfloat16')
 
-  task = kwargs['clearml_task']
+  #task = kwargs['clearml_task']
 
   detection_model = model_builder.build(
       model_config=model_config, is_training=True)
@@ -1024,5 +1023,5 @@ def eval_continuously(
             eval_input,
             use_tpu=use_tpu,
             postprocess_on_cpu=postprocess_on_cpu,
-            global_step=global_step,
-            clearml_task=task)
+            global_step=global_step)
+            #clearml_task=task)
